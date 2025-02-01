@@ -4,20 +4,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidateForOnlineRegistration(err error, pageNo int) map[string]interface{} {
-	errors := make(map[string]interface{})
-	if err != nil {
-		for _, e := range err.(validator.ValidationErrors) {
-			field := LowercaseFirstChar(e.StructField())
-			errors[field] = map[string]interface{}{
-				"page":    pageNo,
-				"message": getMessageForTag(e),
-			}
-		}
-	}
-	return errors
-}
-
 func ValidateForm(err error) map[string]interface{} {
 	errors := make(map[string]interface{})
 	if err != nil {

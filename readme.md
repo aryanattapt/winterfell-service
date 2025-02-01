@@ -22,7 +22,7 @@ You need Docker to run database as a container. Database, we will use:
 Start by cloning the repository to your local machine. Run the following command in your terminal:
 
 ```bash
-git clone https://github.com/aryanattapt/wintefell-service.git
+git clone https://github.com/aryanattapt/winterfell-service.git
 ```
 
 ### 2. Install Dependency
