@@ -1,0 +1,208 @@
+==========================================Winterfell Product API Specification=============================================================
+1. List Products
+    a. URL: /products
+    b. HTTP Request Method: GET
+    c. Request Header:
+    {
+        "Authorization": "Token"
+    }
+
+    d. Request Parameter:
+    {
+        "search": "string", //Search term to filter products by name or description. Minimum 3 character and max 30 character
+        "per_page": number, //Number of items per page. Must be a positive integer.
+        "page": number, //Page number for pagination. Must be a positive integer.
+        "sort_by": "string", //Field to sort the results by. Valid values: name, price, registereddate, category, average_rating etc. Default: registereddate.
+        "sort_order": "string" //Sort order for the results. Valid values: asc, desc. Default: desc
+    }
+
+    e. Implemented Response Body:
+        1. Success Get Products
+            -> HTTP Status: 200
+            -> Response Body Structure
+            {
+                "code": "string", //HTTP Status Code that indicate error or success,
+                "message": "string",  // Indicate Status of get products
+                "metadata": {  // Metadata about the data being returned
+                    "nextpage": boolean,  // Indicates if there is a next page of results (true/false)
+                    "previouspage": boolean,  // Indicates if there is a previous page of results (true/false)
+                    "total_data": number,  // The total number of data items across all pages
+                    "current_page": number,  // The current page number being viewed
+                    "per_page": number,  // The number of items per page
+                    "max_page": number,  // The maximum number of pages available
+                    "total_pages": "string",  // The total number of pages as a string
+                    "sort_by": "string",  // The field by which the data is sorted
+                    "sort_order": "string"  // The order of sorting (e.g., asc or desc)
+                },
+                "data": [  // An array containing the main data items
+                    {
+                        "category_id": "",
+                        "category_name": "",
+                        "category_url": "",
+                        "subcategory_id": "",
+                        "subcategory_name": "",
+                        "subcategory_url": "",
+                        "id": "string",  // The unique identifier for the item. Use uuid as value
+                        "name": "string",  // The name of the item
+                        "category": "string", //Category of item
+                        "total_stock": number,  // The number of items in stock
+                        "registereddate": "string",  // The date when the item was saved (typically in a string format)
+                        "image_url": "string",  // URL of the image associated with the item
+                        "price": number, // The price of the item
+                        "discount": number, //Discount of item in percentage
+                        "final_price": number, //Price after discount
+                        "currency": "string",  // The currency in which the price is expressed (e.g., IDR)
+                        "description": "string",  // A brief description of the item
+                        "average_rating": number,  // The average rating of the item (e.g., from customer reviews)
+                        "is_available": boolean,  // Indicates if the item is currently available (true/false)
+                    }
+                ]
+            }
+
+        2. Bad Request
+            -> Custom Cause:
+                a. Invalid data type for parameters (e.g., per_page or page being non-numeric or negative number)
+                b. Invalid value for sort_by (e.g., a value other than "name", "price", etc.)
+                c. Invalid sort_order (e.g., a value other than "asc" or "desc")
+            -> Refer To E-Commerce General Error Documentation Point 1
+
+        3. Not Found
+            -> Cause: Product not found.
+            -> Refer To E-Commerce General Error Documentation Point 3.
+
+2. Detail Product
+    a. URL: /product/{product_id}
+    b. HTTP Request Method: GET
+    c. Request Header:
+    {
+        "Authorization": "Token"
+    }
+
+    d. Path Parameter:
+    {
+        "product_id": "string", //The unique identifier for the item
+    }
+
+    e. Implemented Response Body:
+        1. Success Get Product
+            -> HTTP Status: 200
+            -> Response Body Structure
+            {
+                "code": "string", //HTTP Status Code that indicate error or success,
+                "message": "string",  // Indicate Status of get products
+                "data": {
+                    "category_name": "",
+                    "category_url": "",
+                    "subcategory_name": "",
+                    "subcategory_url": "",
+                    "id": "string",  // The unique identifier for the item. Use uuid as value
+                    "name": "string",  // The name of the item
+                    "total_stock": number,  // The number of items in stock. Calculate stock from all variant
+                    "registereddate": "string",  // The date when the item was saved (typically in a string format)
+                    "image_url": "string",  // URL of the image associated with the item
+                    "price": number, // The price of the item
+                    "discount": number, //Discount of item in percentage
+                    "final_price": number, //Price after discount
+                    "currency": "string",  // The currency in which the price is expressed (e.g., IDR)
+                    "description": "string",  // A brief description of the item
+                    "average_rating": number,  // The average rating of the item (e.g., from customer reviews)
+                    "is_available": boolean,  // Indicates if the item is currently available (true/false)
+                    "variants": [ // An array containing the variant of items
+                        {
+                            "id": "string", // The unique identifier for the variant. Use uuid as value
+                            "name": "string", // The variant name of the item. Eg. Color: Gray, Blue
+                            "image_url": "string", // URL of the image associated with the variant of item
+                            "subvariant": [
+                                {
+                                    "subname": string, //Subvariant of item. Eg. Size 42, 44
+                                    "stok": number
+                                }
+                            ]
+                            "stock": number,  // The number of items in stock. Calculate From all subvariant
+                            "is_available": boolean,  // Indicates if the item is currently available (true/false)
+                        }
+                    ]
+                }
+            }
+
+        2. Bad Request
+            -> Cause: Missing Product id
+            -> Refer To E-Commerce General Error Documentation Point 1
+
+        3. Not Found
+            -> Cause: Product not found.
+            -> Refer To E-Commerce General Error Documentation Point 3
+
+3. Upsert Product
+    a. URL: /product/{product_id}
+    b. HTTP Request Method: POST(Insert), PUT(Update)
+    c. Request Header:
+    {
+        "Authorization": "Token"
+    }
+
+    d. Path Parameter:
+    {
+        "product_id": "string", //The unique identifier for the item
+    }
+
+    e. Request Body:
+    {
+        "name": "string",  // The name of the item
+        "category": "string", //Category of item
+        "image_url": "string",  // URL of the image associated with the item
+        "price": number, // The price of the item
+        "discount": number, //Discount of item in percentage
+        "currency": "string",  // The currency in which the price is expressed (e.g., IDR)
+        "description": "string",  // A brief description of the item
+        "is_available": boolean,  // Indicates if the item is currently available (true/false)
+        "category_id": string,
+        "subcategory_id": string,
+        "variants": [ //Optional
+            {
+                "id": "string", // The unique identifier for the variant. Use uuid as value
+                "name": "string", // The variant name of the item. Eg. Color: Gray, Blue
+                "image_url": "string", // URL of the image associated with the variant of item
+                "subvariant": [
+                    {
+                        "subname": string, //Subvariant of item. Eg. Size 42, 44
+                        "stok": number
+                    }
+                ]
+                "stock": number,  // The number of items in stock. Calculate From all subvariant
+                "is_available": boolean,  // Indicates if the item is currently available (true/false)
+            }
+        ]
+    }
+
+    f. Implemented Response Body:
+        1. Success Upsert Product
+            -> HTTP Status: 201 (Insert), 200 (Update)
+            -> Response Body Structure
+            {
+                "code": "string", //HTTP Status Code that indicate error or success,
+                "message": "string",  // A human-readable message explaining the error
+                "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+            }
+
+        2. Bad Request
+            -> Cause: Missing Missing Parameter or Invalid Value
+            -> Refer To E-Commerce General Error Documentation Point 1
+
+        3. Not Found
+            -> Cause: Product not found.
+            -> Refer To E-Commerce General Error Documentation Point 3
+
+4. Category
+{
+    "category_id": "",
+    "category_name": "",
+    "category_url": "",
+    "subcategory": [
+        {
+            "subcategory_id": "",
+            "subcategory_name": "",
+            "subcategory_url": ""
+        }
+    ] 
+}

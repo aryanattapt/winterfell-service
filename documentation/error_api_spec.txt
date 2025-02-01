@@ -1,0 +1,120 @@
+==========================================E-Commerce General Error Specification=============================================================
+1. Bad Request
+    -> Cause: Invalid Parameter Value or Missing Parameter
+    -> HTTP Status: 400
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "stacktrace": [  // An array of strings representing the stack trace, which helps trace the error's origin in the code
+            "string" 
+        ],
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+2. Unauthorized
+    -> Cause: Invalid Access Token
+    -> HTTP Status: 401
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "stacktrace": [  // An array of strings representing the stack trace, which helps trace the error's origin in the code
+            "string" 
+        ],
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+3. Not Found
+    -> Cause: Invalid URL / Missing Data
+    -> HTTP Status: 404
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "stacktrace": [  // An array of strings representing the stack trace, which helps trace the error's origin in the code
+            "string" 
+        ],
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+4. Method Not Allowed
+    -> Cause: HTTP Request Method is not the same as specification above
+    -> HTTP Status: 405
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+5. Request Timeout
+    -> Cause: The server took too long to respond due to a heavy load, network issues. The client should retry the request after a brief wait.
+    -> Default Timeout: 30 Seconds
+    -> HTTP Status: 408
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+6. Unsupported Media Type
+    -> Cause: indicates that the media type (data format) sent in the request is not supported by the server. 
+        For example, if the request uses a Content-Type that is not recognized or supported by the server 
+        (such as sending data in application/xml format when the server only supports application/json).
+    -> HTTP Status: 415
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "stacktrace": [  // An array of strings representing the stack trace, which helps trace the error's origin in the code
+            "string" 
+        ],
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+7. Too Many Request
+    -> Cause: The client has sent too many requests in a given amount of time, exceeding the rate limit set by the server. This could be due to excessive API calls or abuse of the service within a short time frame.
+    -> HTTP Status: 429
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+
+8. Internal Server Error
+    -> Cause: An unexpected condition occurred on the server that prevented it from fulfilling the request. This could be due to a variety of issues, such as server misconfigurations, software bugs, database failures, or resource constraints (e.g., memory or CPU overload).
+    -> HTTP Status: 500
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "stacktrace": [  // An array of strings representing the stack trace, which helps trace the error's origin in the code
+            "string" 
+        ],
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
+    
+9. Service Unavailable
+    -> Cause: The server is currently unable to handle the request due to temporary overload or scheduled maintenance.
+    -> HTTP Status: 503
+    -> Response Body Structure:
+    {
+        "code": "string", //HTTP Status Code that indicate error or success,
+        "message": "string",  // A human-readable message explaining the error
+        "stacktrace": [  // An array of strings representing the stack trace, which helps trace the error's origin in the code
+            "string" 
+        ],
+        "timestamp": "string",  // The timestamp when the error occurred, typically in ISO 8601 format
+        "path": "string"  // The API endpoint path where the error occurred (or the resource path)
+    }
