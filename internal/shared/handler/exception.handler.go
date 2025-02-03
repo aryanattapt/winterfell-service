@@ -2,47 +2,39 @@ package handler
 
 import (
 	"time"
+	"wintefell-service/internal/shared/model"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-// Helper function to generate the response structure
-func generateErrorResponse(code string, message string, stacktrace []string, path string) fiber.Map {
-	return fiber.Map{
-		"code":       code,                            // HTTP status code indicating error or success
-		"message":    message,                         // A human-readable message explaining the error
-		"stacktrace": []string{},                      // An empty slice (You can add actual stack trace if needed)
-		"timestamp":  time.Now().Format(time.RFC3339), // Current timestamp in ISO 8601 format
-		"path":       path,                            // The API endpoint path where the error occurred
-	}
+func ErrorResponseHandler(ctx *fiber.Ctx, payload model.ErrorResponse) error {
+	return ctx.Status(payload.Code).JSON(payload)
+}
+
+func SuccessResponseNoDataHandler(ctx *fiber.Ctx, payload model.SuccessResponseNoData) error {
+	return ctx.Status(payload.Code).JSON(payload)
+}
+
+func SuccessResponseHandler(ctx *fiber.Ctx, payload model.SuccessResponse) error {
+	return ctx.Status(payload.Code).JSON(payload)
 }
 
 func MethodNotAllowedRoute(ctx *fiber.Ctx) error {
-	errorResponse := generateErrorResponse(
-		"405",
-		"Sorry, method is not allowed in this URL!",
-		[]string{},
-		ctx.Path(),
-	)
-	return ctx.Status(fiber.StatusMethodNotAllowed).JSON(errorResponse)
+	return ErrorResponseHandler(ctx, model.ErrorResponse{
+		Code:       fiber.StatusMethodNotAllowed,
+		Message:    "Sorry, method is not allowed in this URL!",
+		Stacktrace: []string{},
+		Path:       ctx.Path(),
+		Timestamp:  time.Now().Format(time.RFC3339),
+	})
 }
 
 func NotFoundRoute(ctx *fiber.Ctx) error {
-	errorResponse := generateErrorResponse(
-		"404",
-		"Sorry, destination not found",
-		[]string{},
-		ctx.Path(),
-	)
-	return ctx.Status(fiber.StatusNotFound).JSON(errorResponse)
-}
-
-func NoContentRoute(ctx *fiber.Ctx) error {
-	errorResponse := generateErrorResponse(
-		"204",
-		"No content available",
-		[]string{},
-		ctx.Path(),
-	)
-	return ctx.Status(fiber.StatusNoContent).JSON(errorResponse)
+	return ErrorResponseHandler(ctx, model.ErrorResponse{
+		Code:       fiber.StatusNotFound,
+		Message:    "Sorry, destination not found",
+		Stacktrace: []string{},
+		Path:       ctx.Path(),
+		Timestamp:  time.Now().Format(time.RFC3339),
+	})
 }
